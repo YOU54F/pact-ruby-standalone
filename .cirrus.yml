@@ -109,38 +109,38 @@ DOCKER_ARGS_X64_TEMPLATE: &DOCKER_ARGS_X64_TEMPLATE
 
 ## Test published standalone against arm64 Dockerfiles provided for users
 alpine_arm64_task:  
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   arm_container:
     dockerfile: Dockerfile.alpine.arm64
     <<: *DOCKER_ARGS_ARM64_TEMPLATE
   <<: *TEST_RUBY_CLI_TASK_TEMPLATE
 ubuntu_arm64_task:  
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   arm_container:
     dockerfile: Dockerfile.ubuntu
     <<: *DOCKER_ARGS_ARM64_TEMPLATE
   <<: *TEST_RUBY_CLI_TASK_TEMPLATE
 debian_arm64_task:  
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   arm_container:
     dockerfile: Dockerfile.debian.slim
     <<: *DOCKER_ARGS_ARM64_TEMPLATE
   <<: *TEST_RUBY_CLI_TASK_TEMPLATE
 ## Test published standalone against x64 Dockerfiles provided for users
 alpine_x64_task:  
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   container:
     dockerfile: Dockerfile.alpine.x64
     <<: *DOCKER_ARGS_X64_TEMPLATE
   <<: *TEST_RUBY_CLI_TASK_TEMPLATE
 ubuntu_x64_task:  
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   container:
     dockerfile: Dockerfile.ubuntu
     <<: *DOCKER_ARGS_X64_TEMPLATE
   <<: *TEST_FULL_CLI_TASK_TEMPLATE
 debian_x64_task:  
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   container:
     dockerfile: Dockerfile.debian.slim
     <<: *DOCKER_ARGS_X64_TEMPLATE
@@ -149,12 +149,13 @@ debian_x64_task:
 STANDALONE_INSTALL_TASK_TEMPLATE: &STANDALONE_INSTALL_TASK_TEMPLATE
   install_script: |
     curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | bash \
+    && mkdir -p /usr/local/bin \
     && ln -s $PWD/pact/bin/* /usr/local/bin \
     && ls pact/bin/ \
     && ls /usr/local/bin
 ## Test published standalone against common debian based images
 cli_test_debian_arm_task: 
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   env:
     matrix:
       - IMAGE: ruby:3.2.2-slim
@@ -169,7 +170,7 @@ cli_test_debian_arm_task:
 
 ## Test published standalone against common alpine based images
 cli_test_alpine_arm_task: 
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   env:
     matrix:
       - IMAGE: ruby:3.2.2-alpine
@@ -184,7 +185,7 @@ cli_test_alpine_arm_task:
 
 ## Test published standalone against common debian based images
 cli_test_debian_task: 
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   env:
     matrix:
       - IMAGE: ruby:3.2.2-slim
@@ -199,7 +200,7 @@ cli_test_debian_task:
 
 ## Test published standalone against common alpine based images
 cli_test_alpine_task: 
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   env:
     matrix:
       - IMAGE: ruby:3.2.2-alpine
