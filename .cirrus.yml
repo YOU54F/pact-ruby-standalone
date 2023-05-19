@@ -215,7 +215,7 @@ cli_test_alpine_task:
 
 ## Test published standalone against MacOS arm64
 cli_test_macos_task: 
-  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   macos_instance:
     image: ghcr.io/cirruslabs/macos-ventura-base:latest
   << : *STANDALONE_INSTALL_TASK_TEMPLATE
