@@ -153,6 +153,36 @@ STANDALONE_INSTALL_TASK_TEMPLATE: &STANDALONE_INSTALL_TASK_TEMPLATE
     && ls pact/bin/ \
     && ls /usr/local/bin
 ## Test published standalone against common debian based images
+cli_test_debian_arm_task: 
+  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  env:
+    matrix:
+      - IMAGE: ruby:3.2.2-slim
+      - IMAGE: node:20-slim
+      - IMAGE: golang:1.20.2
+  arm_container:
+    image: $IMAGE
+    <<: *DOCKER_ARGS_ARM64_TEMPLATE
+  curl_script: apt update && apt install -y curl
+  <<: *STANDALONE_INSTALL_TASK_TEMPLATE
+  <<: *TEST_FULL_CLI_TASK_TEMPLATE
+
+## Test published standalone against common alpine based images
+cli_test_alpine_arm_task: 
+  only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
+  env:
+    matrix:
+      - IMAGE: ruby:3.2.2-alpine
+      - IMAGE: node:20-alpine
+      - IMAGE: golang:1.20.2-alpine
+  arm_container:
+    image: $IMAGE
+    <<: *DOCKER_ARGS_ARM64_TEMPLATE
+  curl_script: apk add curl bash gcompat libc6-compat 
+  <<: *STANDALONE_INSTALL_TASK_TEMPLATE
+  <<: *TEST_RUBY_CLI_TASK_TEMPLATE
+
+## Test published standalone against common debian based images
 cli_test_debian_task: 
   only_if: $CIRRUS_CHANGE_TITLE =~ '.*\[test(standalone)\].*'
   env:
@@ -175,7 +205,7 @@ cli_test_alpine_task:
       - IMAGE: ruby:3.2.2-alpine
       - IMAGE: node:20-alpine
       - IMAGE: golang:1.20.2-alpine
-  arm_container:
+  container:
     image: $IMAGE
     <<: *DOCKER_ARGS_ARM64_TEMPLATE
   curl_script: apk add curl bash gcompat libc6-compat 
