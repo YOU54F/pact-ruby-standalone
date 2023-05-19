@@ -149,7 +149,6 @@ debian_x64_task:
 STANDALONE_INSTALL_TASK_TEMPLATE: &STANDALONE_INSTALL_TASK_TEMPLATE
   install_script: |
     curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | bash \
-    && mkdir -p /usr/local/bin \
     && ln -s $PWD/pact/bin/* /usr/local/bin \
     && ls pact/bin/ \
     && ls /usr/local/bin
@@ -219,4 +218,6 @@ cli_test_macos_task:
   only_if: $CIRRUS_CHANGE_TITLE =~ 'test:.*\[standalone\].*'
   macos_instance:
     image: ghcr.io/cirruslabs/macos-ventura-base:latest
+  setup_script: sudo mkdir -p /usr/local/bin && sudo chown -R `whoami` /usr/local/*
   << : *STANDALONE_INSTALL_TASK_TEMPLATE
+  << : *TEST_FULL_CLI_TASK_TEMPLATE
