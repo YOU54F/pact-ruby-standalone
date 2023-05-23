@@ -312,7 +312,7 @@ This allows us to reuse our tasks across cirrus-ci, and ideally run the same scr
         PACT_VERSION: 2.0.1
 
         TEST_TASK_TEMPLATE: &TEST_TASK_TEMPLATE
-        test_script: uname -a && pact-mock-service --help
+        test_script: uname -a && pact-mock-service help
 
         DOCKER_ARGS_ARM64_TEMPLATE: &DOCKER_ARGS_ARM64_TEMPLATE
             docker_arguments:

@@ -65,7 +65,7 @@ for tool in ${tools[@]}; do
   if [ "$BINARY_OS" != "windows" ] ; then echo "no bat file ext needed for $(uname -a)" ; else FILE_EXT=.bat; fi
   if [ "$BINARY_OS" = "windows" ] && [ "$tool" = "pact-plugin-cli" ] ; then  FILE_EXT=.exe ; else echo "no exe file ext needed for $(uname -a)"; fi
   echo executing ${PATH_TO_BIN}${tool}${FILE_EXT} 
-  if [ "$BINARY_ARCH" = "x86" ] && [ "$tool" = "pact-plugin-cli" ] ; then  echo "skipping for x86" ; else ${PATH_TO_BIN}${tool}${FILE_EXT} --help; fi
+  if [ "$BINARY_ARCH" = "x86" ] && [ "$tool" = "pact-plugin-cli" ] ; then  echo "skipping for x86" ; else ${PATH_TO_BIN}${tool}${FILE_EXT} help; fi
 done
 
 
