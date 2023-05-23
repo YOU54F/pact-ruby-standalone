@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 IMAGE=pact-ruby-standalone-bundle-base
 RELEASE_IMAGE=pact-ruby-standalone-release-base

@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/sh -eu
 set -eu # This needs to be here for windows bash, which doesn't read the #! line above
 
 detected_os=$(uname -sm)

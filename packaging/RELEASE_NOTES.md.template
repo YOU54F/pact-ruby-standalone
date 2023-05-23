@@ -7,7 +7,7 @@ This package contains the Ruby implementations of the Pact Mock Service, Pact Pr
 ### Linux and MacOS
 
 ```
-curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | tag=<PACKAGE_VERSION> bash
+curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | tag=<PACKAGE_VERSION> sh
 ```
 
 ### MacOS

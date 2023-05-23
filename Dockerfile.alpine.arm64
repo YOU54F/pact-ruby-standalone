@@ -7,11 +7,23 @@ ARG PACT_VERSION
 ARG TARGET_ARCH=${TARGET_ARCH:-arm64}
 ARG PACT_VERSION=${PACT_VERSION:-2.0.1}
 
-RUN apk --no-cache add gcompat libc6-compat bash
+RUN apk --no-cache add gcompat libc6-compat
 
+## Use this if you are consumign this docker file for a project
+## Use this if you are testing the remote build of a distributable
 RUN wget -q https://github.com/pact-foundation/pact-ruby-standalone/releases/download/v${PACT_VERSION}/pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz \
      && tar xzf pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz \
-     && rm -rf pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz \
-     && ln -s /pact/bin/* /usr/local/bin
+     && rm -rf pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz && \
+     ln -s /pact/bin/* /usr/local/bin
+
+## Use this if you are testing the local build of a distributable
+COPY pkg/pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz
+RUN tar xzf pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz \
+&& rm -rf pact-${PACT_VERSION}-linux-${TARGET_ARCH}.tar.gz && \
+ln -s /pact/bin/* /usr/local/bin
+
+## Use this if you are modifying the distributable after packaging for testing
+COPY pkg/pact  pact
+RUN  ln -s /pact/bin/* /usr/local/bin
 
 ENTRYPOINT ["pact-mock-service"]

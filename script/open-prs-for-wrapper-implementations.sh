@@ -1,4 +1,4 @@
-#!/bin/bash -Eeuo pipefail
+#!/bin/sh -Eeuo pipefail
 
 VERSION=$(cat VERSION)
 
