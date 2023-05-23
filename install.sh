@@ -13,7 +13,18 @@
 
 if [[ -z $tag ]]; then
   tag=$(basename $(curl -fs -o/dev/null -w %{redirect_url} https://github.com/pact-foundation/pact-ruby-standalone/releases/latest))
+  echo "Thanks for downloading the latest release of pact-ruby-standalone $tag."
+  echo "-----"
+  echo "Note:"
+  echo "-----"
+  echo "You can download a fixed version by setting the tag environment variable eg tag=v1.92.0"
+  echo "example:"
+  echo "curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | tag=v1.92.0 bash"
+else
+  echo "Thanks for downloading pact-ruby-standalone $tag."
 fi
+
+
 
 case $(uname -sm) in
   'Linux x86_64')
@@ -50,6 +61,14 @@ esac
 
 
 filename="pact-${tag#v}-${os}.tar.gz"
-curl -LO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/${tag}/${filename}
-tar xzf ${filename}
-rm ${filename}
+echo "-------------"
+echo "Downloading:"
+echo "-------------"
+curl -sLO https://github.com/pact-foundation/pact-ruby-standalone/releases/download/${tag}/${filename} && echo downloaded ${filename} || (echo "Sorry, you'll need to install the pact-ruby-standalone manually." && exit 1)
+tar xzf ${filename} && echo unarchived ${filename} || (echo "Sorry, you'll need to unarchived the pact-ruby-standalone manually." && exit 1)
+rm ${filename} && echo removed ${filename} || (echo "Sorry, you'll need to remove the pact-ruby-standalone archive manually." && exit 1)
+echo "pact-ruby-standalone ${tag} installed to $(pwd)/pact"
+echo "-------------------"
+echo "available commands:"
+echo "-------------------"
+ls -1 $(pwd)/pact/bin
