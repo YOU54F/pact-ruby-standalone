@@ -6,6 +6,10 @@ VERSION = File.read('VERSION').strip
 TRAVELING_RUBY_VERSION = "20230605-3.2.2"
 TRAVELING_RUBY_PKG_DATE = TRAVELING_RUBY_VERSION.split("-").first
 PLUGIN_CLI_VERSION = "0.1.0"
+TRAVELING_RB_VERSION = TRAVELING_RUBY_VERSION.split("-").last
+RUBY_COMPAT_VERSION = TRAVELING_RB_VERSION.split(".").first(2).join(".") + ".0"
+RUBY_MAJOR_VERSION = TRAVELING_RB_VERSION.split(".").first.to_i
+RUBY_MINOR_VERSION = TRAVELING_RB_VERSION.split(".")[1].to_i
 
 desc "Package pact-ruby-standalone for OSX, Linux x86_64 and windows x86_64"
 task :package => ['package:linux:x86_64','package:linux:arm64', 'package:osx:x86_64', 'package:osx:arm64','package:windows:x86_64','package:windows:x86']
@@ -46,8 +50,8 @@ namespace :package do
   end
   desc "Install gems to local directory"
   task :bundle_install do
-    if RUBY_VERSION !~ /^3\.2\./
-      abort "You can only 'bundle install' using Ruby 3.2.2, because that's what Traveling Ruby uses."
+    if RUBY_VERSION !~ /^#{RUBY_MAJOR_VERSION}\.#{RUBY_MINOR_VERSION}\./
+      abort "You can only 'bundle install' using Ruby #{RUBY_VERSION}, because that's what Traveling Ruby uses."
     end
     sh "rm -rf build/tmp"
     sh "mkdir -p build/tmp"
@@ -55,7 +59,7 @@ namespace :package do
     sh "mkdir -p build/tmp/lib/pact/mock_service"
     # sh "cp lib/pact/mock_service/version.rb build/tmp/lib/pact/mock_service/version.rb"
     Bundler.with_unbundled_env do
-      sh "cd build/tmp && env bundle lock --add-platform x64-mingw32 && bundle config set --local path '../vendor' && env BUNDLE_DEPLOYMENT=true bundle install"
+    sh "cd build/tmp && env bundle lock --add-platform x64-mingw32 && bundle config set --local path '../vendor' && bundle config set --local without 'development' && bundle install"
       generate_readme
     end
     sh "rm -rf build/tmp"
@@ -128,7 +132,7 @@ def create_package(version, source_target, package_target, os_type)
   sh "cp packaging/bundler-config #{package_dir}/lib/vendor/.bundle/config"
 
   remove_unnecessary_files package_dir
-  install_plugin_cli package_dir, package_target
+  # install_plugin_cli package_dir, package_target
 
   if !ENV['DIR_ONLY']
     sh "mkdir -p pkg"
@@ -207,10 +211,11 @@ def remove_unnecessary_files package_dir
   sh "rm -f #{package_dir}/lib/ruby/lib/ruby/*/*/enc/koi8_*"
   sh "rm -f #{package_dir}/lib/ruby/lib/ruby/*/*/enc/emacs*"
   sh "rm -f #{package_dir}/lib/ruby/lib/ruby/*/*/enc/gb*"
-  sh "rm -f #{package_dir}/lib/ruby/lib/ruby/*/*/enc/big5*"
-  # sh "rm -f #{package_dir}/lib/ruby/lib/ruby/*/*/enc/windows*"
-  # sh "rm -f #{package_dir}/lib/ruby/lib/ruby/*/*/enc/utf_16*"
-  # sh "rm -f #{package_dir}/lib/ruby/lib/ruby/*/*/enc/utf_32*"
+
+  sh "rm -rf #{package_dir}/lib/ruby/lib/ruby/site_ruby/#{RUBY_COMPAT_VERSION}/bundler"
+  sh "rm -rf #{package_dir}/lib/ruby/lib/ruby/#{RUBY_COMPAT_VERSION}/bundler"
+  sh "rm -rf #{package_dir}/lib/ruby/lib/ruby/#{RUBY_COMPAT_VERSION}/rubygems"
+  sh "rm -rf #{package_dir}/lib/ruby/lib/ruby/*/*/enc/trans"
 end
 
 def generate_readme

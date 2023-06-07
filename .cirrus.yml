@@ -1,6 +1,5 @@
 env:
-  PACT_VERSION: 2.0.1
-  tag: v2.0.1
+  PACT_CLI_VERSION: 2.0.1
 
 #####################################
 ###    BUILD & TEST STANDALONE    ###
@@ -57,7 +56,7 @@ builder_macos_arm_task:
 #####################################
 
 # Tests a specified version of the standalone against several types of Docker images
-# the tag version is set at the top of file tag: v2.0.1
+# the PACT_CLI_VERSION version is set at the top of file PACT_CLI_VERSION: v2.0.1
 # 
 # It tests a combination of Dockerfiles
 # The Dockerfiles are provided for users to build their own images
@@ -92,18 +91,18 @@ TEST_RUBY_CLI_TASK_TEMPLATE: &TEST_RUBY_CLI_TASK_TEMPLATE
       pactflow help
 
 TEST_FULL_CLI_TASK_TEMPLATE: &TEST_FULL_CLI_TASK_TEMPLATE
-  test_plugin_cli_script: pact-plugin-cli help
+  # test_plugin_cli_script: pact-plugin-cli help
   <<: *TEST_RUBY_CLI_TASK_TEMPLATE
 
 DOCKER_ARGS_ARM64_TEMPLATE: &DOCKER_ARGS_ARM64_TEMPLATE
     docker_arguments:
-      PACT_VERSION: $PACT_VERSION
+      PACT_CLI_VERSION: $PACT_CLI_VERSION
       TARGET_ARCH: arm64
       TARGET_PLATFORM: linux
 
 DOCKER_ARGS_X64_TEMPLATE: &DOCKER_ARGS_X64_TEMPLATE
     docker_arguments:
-      PACT_VERSION: $PACT_VERSION
+      PACT_CLI_VERSION: $PACT_CLI_VERSION
       TARGET_ARCH: x86_64
       TARGET_PLATFORM: linux
 
@@ -148,7 +147,7 @@ debian_x64_task:
 
 STANDALONE_INSTALL_TASK_TEMPLATE: &STANDALONE_INSTALL_TASK_TEMPLATE
   install_script: |
-    curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | bash \
+    curl -fsSL https://raw.githubusercontent.com/pact-foundation/pact-ruby-standalone/master/install.sh | sh \
     && ln -s $PWD/pact/bin/* /usr/local/bin \
     && ls pact/bin/ \
     && ls /usr/local/bin
@@ -178,7 +177,7 @@ cli_test_alpine_arm_task:
   arm_container:
     image: $IMAGE
     <<: *DOCKER_ARGS_ARM64_TEMPLATE
-  curl_script: apk add curl bash gcompat libc6-compat 
+  curl_script: apk add curl gcompat libc6-compat 
   <<: *STANDALONE_INSTALL_TASK_TEMPLATE
   <<: *TEST_RUBY_CLI_TASK_TEMPLATE
 
@@ -208,7 +207,7 @@ cli_test_alpine_task:
   container:
     image: $IMAGE
     <<: *DOCKER_ARGS_ARM64_TEMPLATE
-  curl_script: apk add curl bash gcompat libc6-compat 
+  curl_script: apk add curl gcompat libc6-compat 
   <<: *STANDALONE_INSTALL_TASK_TEMPLATE
   <<: *TEST_RUBY_CLI_TASK_TEMPLATE
 

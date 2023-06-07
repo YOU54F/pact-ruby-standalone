@@ -46,7 +46,7 @@ tools=(
   pact-broker
   pact-message
   pact-mock-service
-  pact-plugin-cli
+#   pact-plugin-cli
   pact-provider-verifier
   pact-stub-service
   pactflow
