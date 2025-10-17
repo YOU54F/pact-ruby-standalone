@@ -8,7 +8,7 @@ Creates a standalone pact command line executable containing
 
 ## Package contents
 
-This version (2.5.6) of the Pact standalone executables package contains:
+This version (2.5.7) of the Pact standalone executables package contains:
 
   * [pact-cli](https://github.com/you54f/pact-cli)
   * [pact_mock_server_cli](https://github.com/pact-foundation/pact-core-mock-server/tree/main/pact_mock_server_cli)

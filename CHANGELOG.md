@@ -1,3 +1,12 @@
+<a name="v2.5.7"></a>
+### v2.5.7 (2025-10-17)
+
+
+#### Bug Fixes
+
+* add pact-publish cmd was incorrect	 ([a06a39b](/../../commit/a06a39b))
+
+
 <a name="v2.5.5"></a>
 ### v2.5.5 (2025-10-17)
 
